@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+*.env
+.env.*
+!.env.example
+
+# Project
+.cache/
+contributors.txt
+temp_repo_clone/
+*.bak
+*.bk
+
+# Edge profile (created at runtime)
+deepseek-cli-edge-profile/

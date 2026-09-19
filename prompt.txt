@@ -1,0 +1,1 @@
+Write a Python function that calculates the fibonacci sequence up to n terms.

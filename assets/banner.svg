@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#16213e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f3460;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4f6ef7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6c8cff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="300" fill="url(#bg)" rx="12"/>
+  <text x="600" y="120" text-anchor="middle" fill="url(#accent)" font-family="'Segoe UI', Arial, sans-serif" font-size="52" font-weight="700">🚀 deepseek-website-to-cli</text>
+  <text x="600" y="170" text-anchor="middle" fill="#a0aec0" font-family="'Segoe UI', Arial, sans-serif" font-size="22">RPA-powered CLI for DeepSeek Chat — Browser Extension Bridge</text>
+  <text x="600" y="220" text-anchor="middle" fill="#718096" font-family="'Segoe UI', Arial, sans-serif" font-size="16">
+    WebSocket Bridge · Tab Management · Smart DOM Interaction · Code Extraction
+  </text>
+  <line x1="200" y1="250" x2="1000" y2="250" stroke="#4f6ef7" stroke-width="2" opacity="0.3"/>
+  <text x="600" y="275" text-anchor="middle" fill="#4a5568" font-family="'Segoe UI', Arial, sans-serif" font-size="14">pip install deepseek-website-to-cli</text>
+</svg>

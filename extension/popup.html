@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>DeepSeek CLI Bridge</title>
+  <style>
+    body {
+      width: 280px;
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #1a1a2e;
+      color: #e2e8f0;
+      box-sizing: border-box;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 10px;
+      background-color: #f56565;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+    .status-dot.connected {
+      background-color: #48bb78;
+    }
+    .status-text {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .instruction {
+      font-size: 13px;
+      color: #a0aec0;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4f6ef7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #3b5de7;
+    }
+    button:active {
+      background-color: #2d4ed6;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div id="statusDot" class="status-dot"></div>
+    <div id="statusText" class="status-text">Waiting for CLI...</div>
+  </div>
+  <div class="instruction">
+    Run <code>deepseek-cli</code> in your terminal to start automating DeepSeek.
+  </div>
+  <button id="reconnectBtn">Reconnect</button>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

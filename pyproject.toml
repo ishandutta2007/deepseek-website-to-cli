@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deepseek-website-to-cli"
+version = "0.1.0"
+description = "RPA-powered CLI tool that converts DeepSeek website (chat.deepseek.com) interactions into a command-line interface using browser automation."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [
+    {name = "Ishan Dutta", email = "ishandutta2007@gmail.com"},
+]
+keywords = ["deepseek", "cli", "rpa", "browser-automation", "browser-extension", "edge"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "websockets>=12.0",
+    "rich>=13.0.0",
+    "chardet>=5.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/ishandutta2007/deepseek-website-to-cli"
+Repository = "https://github.com/ishandutta2007/deepseek-website-to-cli"
+Issues = "https://github.com/ishandutta2007/deepseek-website-to-cli/issues"
+
+[project.scripts]
+deepseek-cli = "deepseek_website_to_cli.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+deepseek_website_to_cli = ["py.typed"]

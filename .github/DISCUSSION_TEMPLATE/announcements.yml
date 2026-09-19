@@ -1,0 +1,15 @@
+title: "[Announcement] "
+labels:
+  - announcement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Announcement
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Please share the announcement details.
+    validations:
+      required: true
