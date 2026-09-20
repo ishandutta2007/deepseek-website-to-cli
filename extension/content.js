@@ -212,45 +212,57 @@
   // ── Response Status Check ──────────────────────────────────────────────
 
   function isGenerating() {
-    // 1. Stop/Interrupt button visible in the UI
+    // ── Strategy 1: Look for the Stop/Interrupt button ──────────────
+    // DeepSeek replaces the send button with a stop button during generation.
+    // Be precise — only match buttons whose aria-label exactly indicates stopping,
+    // and avoid matching unrelated buttons that happen to have "stop" in a class.
     const stopSelectors = [
-      'button[aria-label*="Stop" i]',
-      'button[aria-label*="Interrupt" i]',
-      'button[class*="stop" i]',
-      'div[class*="stop-generating"]',
+      'button[aria-label="Stop generating"]',
+      'button[aria-label="Stop Generating"]',
+      'button[aria-label="Interrupt"]',
       'button[data-testid="stop-button"]',
+      'div[class*="stop-generating"]',
     ];
     for (const sel of stopSelectors) {
       const el = document.querySelector(sel);
-      if (el && isVisible(el)) return true;
+      if (el && isVisible(el)) {
+        return true;
+      }
     }
 
-    // 2. Streaming / loading indicators
+    // ── Strategy 2: DeepSeek-specific streaming indicators ──────────
+    // Only check indicators that are genuinely tied to active generation.
     const streamingSelectors = [
       '.result-streaming',
       '[data-is-streaming="true"]',
-      'div[class*="streaming"]',
-      'div[class*="loading"]',
-      'span[class*="cursor"]',
-      'span.blinking-cursor',
-      'div[class*="thinking"]',
     ];
     for (const sel of streamingSelectors) {
       const el = document.querySelector(sel);
-      if (el && isVisible(el)) return true;
-    }
-
-    // 3. Active spinner animations
-    const activeSpinners = document.querySelectorAll(
-      '.animate-spin, [class*="spin"], [class*="loading-indicator"]'
-    );
-    for (const el of activeSpinners) {
-      if (isVisible(el)) {
-        // Make sure it's related to response generation, not UI chrome
-        const parent = el.closest('[class*="message"], [class*="chat"], [class*="response"]');
-        if (parent) return true;
+      if (el && isVisible(el)) {
+        return true;
       }
     }
+
+    // ── Strategy 3: Blinking/typing cursor in the LAST message only ─
+    // DeepSeek shows a blinking cursor while streaming a response.
+    // Scope this tightly to the last assistant message to avoid false
+    // positives from cursors elsewhere on the page.
+    const assistantMsgs = getAssistantMessages();
+    if (assistantMsgs.length > 0) {
+      const lastMsg = assistantMsgs[assistantMsgs.length - 1];
+      const cursorEl = lastMsg.querySelector(
+        'span.blinking-cursor, span[class*="blink"], span[class*="typing-cursor"]'
+      );
+      if (cursorEl && isVisible(cursorEl)) {
+        return true;
+      }
+    }
+
+    // ── Strategy 4: Send button presence check ──────────────────────
+    // During generation, DeepSeek hides the send button and shows a stop
+    // button. If the chat input exists but no send button is visible
+    // and no stop button was found above, generation may have just
+    // finished — so we do NOT treat this as generating.
 
     return false;
   }

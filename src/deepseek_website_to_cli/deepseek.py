@@ -130,6 +130,12 @@ class DeepSeekAutomation:
 
         Polls the extension's content script for response status until
         generation is complete or the timeout is reached.
+
+        Includes a "stale generation" safety valve: if the extension
+        reports ``generating=True`` but the response content hasn't
+        changed for several consecutive polls, we treat generation as
+        complete.  This handles false-positive generation indicators
+        from persistent DOM elements on chat.deepseek.com.
         """
 
         logger.info(
@@ -143,10 +149,15 @@ class DeepSeekAutomation:
         was_generating = False
         last_response_length = 0
         stable_count = 0
+        stale_generating_count = 0  # Tracks consecutive polls where generating=True but content unchanged
         has_response = False
         response_length = 0
         initial_count = getattr(self, "_initial_response_count", 0)
         initial_len = getattr(self, "_initial_response_len", 0)
+
+        # How many consecutive stable polls during "generating" before we
+        # declare the generation stale and treat it as complete.
+        STALE_GENERATING_THRESHOLD = 5
 
         while (asyncio.get_event_loop().time() - start_time) < self.max_wait_seconds:
             try:
@@ -170,12 +181,41 @@ class DeepSeekAutomation:
             if generating:
                 was_generating = True
                 stable_count = 0
-                logger.debug(
-                    "Still generating... (len=%d, code_blocks=%d, %ds elapsed)",
-                    response_length,
-                    code_block_count,
-                    elapsed,
-                )
+
+                # ── Stale generation detection ────────────────────────
+                # If the response has meaningful content but its length
+                # hasn't changed, the "generating" indicator is likely a
+                # false positive from a lingering DOM element.
+                if has_response and response_length > 0 and response_length == last_response_length:
+                    stale_generating_count += 1
+                    logger.debug(
+                        "Generating flag still set but content unchanged "
+                        "(%d/%d stale polls, len=%d, %ds elapsed).",
+                        stale_generating_count,
+                        STALE_GENERATING_THRESHOLD,
+                        response_length,
+                        elapsed,
+                    )
+                    if stale_generating_count >= STALE_GENERATING_THRESHOLD:
+                        logger.info(
+                            "Generation indicator appears stale after %ds "
+                            "(content stable for %d polls, len=%d, code_blocks=%d). "
+                            "Treating as complete.",
+                            elapsed,
+                            stale_generating_count,
+                            response_length,
+                            code_block_count,
+                        )
+                        await asyncio.sleep(1.0)  # Grace period
+                        return
+                else:
+                    stale_generating_count = 0
+                    logger.debug(
+                        "Still generating... (len=%d, code_blocks=%d, %ds elapsed)",
+                        response_length,
+                        code_block_count,
+                        elapsed,
+                    )
             elif was_generating:
                 # Was generating but stopped — generation is complete!
                 logger.info(
