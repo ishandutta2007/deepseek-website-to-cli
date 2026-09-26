@@ -149,7 +149,8 @@ async function handleCommand(msg) {
       case 'send_prompt':
       case 'check_response_status':
       case 'extract_last_code_block':
-      case 'extract_full_response': {
+      case 'extract_full_response':
+      case 'diagnose': {
         let targetTab = null;
         if (params.tabId) {
           try {

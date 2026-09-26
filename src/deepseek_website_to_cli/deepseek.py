@@ -176,7 +176,20 @@ class DeepSeekAutomation:
             response_count = status.get("responseCount", 0)
             response_length = status.get("latestResponseLength", 0)
             code_block_count = status.get("codeBlockCount", 0)
+            diag = status.get("diag", {})
             elapsed = int(asyncio.get_event_loop().time() - start_time)
+
+            logger.debug(
+                "Poll: generating=%s hasResponse=%s count=%d len=%d "
+                "code_blocks=%d diag=%s elapsed=%ds",
+                generating,
+                has_response,
+                response_count,
+                response_length,
+                code_block_count,
+                diag,
+                elapsed,
+            )
 
             if generating:
                 was_generating = True
